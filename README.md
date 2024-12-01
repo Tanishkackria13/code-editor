@@ -1,3 +1,27 @@
+Online Code Editor
+
+
+
+A responsive and user-friendly online code editor built with Next.js 14, TypeScript, and CodeMirror. It supports multiple programming languages and includes features like theme toggling and syntax highlighting.
+
+Features
+Multi-language support:
+
+Python
+JavaScript
+TypeScript
+Go
+PHP
+Swift
+Rust
+C/C++
+Syntax Highlighting: Dynamic syntax highlighting for each selected language.
+
+Theme Toggle: Toggle between light and dark themes with automatic system preference detection.
+
+Responsive Design: The editor is designed to work seamlessly across devices, from desktops to mobile.
+
+Output Panel: A placeholder output panel simulating the result of code execution.
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
