@@ -6,27 +6,28 @@ const ThemeToggle = () => {
   const [isDark, setIsDark] = useState<boolean | null>(null);
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const savedTheme = localStorage.getItem("theme");
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme) {
+      const isDarkMode = savedTheme === "dark";
+      setIsDark(isDarkMode);
+      document.documentElement.classList.toggle("dark", isDarkMode);
+    } else {
       const prefersDark = window.matchMedia(
         "(prefers-color-scheme: dark)"
       ).matches;
-      const isDarkMode = savedTheme === "dark" || (!savedTheme && prefersDark);
-      setIsDark(isDarkMode);
-      document.documentElement.classList.toggle("dark", isDarkMode);
+      setIsDark(prefersDark);
+      document.documentElement.classList.toggle("dark", prefersDark);
     }
   }, []);
 
   const toggleTheme = () => {
-    const newTheme = !isDark ? "dark" : "light";
+    const newTheme = isDark ? "light" : "dark";
     setIsDark(!isDark);
     document.documentElement.classList.toggle("dark", !isDark);
     localStorage.setItem("theme", newTheme);
   };
 
-  if (isDark === null) {
-    return null; // Prevent rendering until theme is determined
-  }
+  if (isDark === null) return null;
 
   return (
     <button

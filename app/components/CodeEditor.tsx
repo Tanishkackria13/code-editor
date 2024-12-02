@@ -12,10 +12,10 @@ import { cpp } from "@codemirror/lang-cpp";
 
 interface CodeEditorProps {
   language: string;
-  setCode: React.Dispatch<React.SetStateAction<string>>;
+  setCode: (code: string) => void;
 }
 
-const languageExtensions: Record<string, any> = {
+const languageExtensions: Record<string, () => any> = {
   javascript,
   python,
   php,
@@ -58,9 +58,11 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ language, setCode }) => {
         editorInstance.current.destroy();
       }
     };
-  }, [language]);
+  }, [language, setCode]);
 
-  return <div className="border p-4 bg-white dark:bg-gray-900" ref={editorRef}></div>;
+  return (
+    <div className="border p-4 bg-white dark:bg-gray-900" ref={editorRef}></div>
+  );
 };
 
 export default CodeEditor;
