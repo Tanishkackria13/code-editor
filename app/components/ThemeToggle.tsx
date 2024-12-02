@@ -5,35 +5,27 @@ import { useState, useEffect } from "react";
 const ThemeToggle = () => {
   const [isDark, setIsDark] = useState<boolean | null>(null);
 
-  // Effect to load theme from localStorage or system preference
   useEffect(() => {
-    // Check for theme in localStorage
-    const savedTheme = localStorage.getItem("theme");
-    if (savedTheme) {
-      const isDarkMode = savedTheme === "dark";
-      setIsDark(isDarkMode);
-      document.documentElement.classList.toggle("dark", isDarkMode);
-    } else {
-      // Default to system theme
+    if (typeof window !== "undefined") {
+      const savedTheme = localStorage.getItem("theme");
       const prefersDark = window.matchMedia(
         "(prefers-color-scheme: dark)"
       ).matches;
-      setIsDark(prefersDark);
-      document.documentElement.classList.toggle("dark", prefersDark);
+      const isDarkMode = savedTheme === "dark" || (!savedTheme && prefersDark);
+      setIsDark(isDarkMode);
+      document.documentElement.classList.toggle("dark", isDarkMode);
     }
   }, []);
 
-  // Toggle theme function
   const toggleTheme = () => {
-    const newTheme = isDark ? "light" : "dark";
+    const newTheme = !isDark ? "dark" : "light";
     setIsDark(!isDark);
     document.documentElement.classList.toggle("dark", !isDark);
-    localStorage.setItem("theme", newTheme); // Save the new theme to localStorage
+    localStorage.setItem("theme", newTheme);
   };
 
-  // Wait until the initial theme is loaded
   if (isDark === null) {
-    return null; // Avoid rendering the button until the theme state is determined
+    return null; // Prevent rendering until theme is determined
   }
 
   return (

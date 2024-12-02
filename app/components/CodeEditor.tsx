@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useEffect, useRef } from "react";
 import { EditorState } from "@codemirror/state";
 import { EditorView, basicSetup } from "codemirror";
@@ -11,9 +12,10 @@ import { cpp } from "@codemirror/lang-cpp";
 
 interface CodeEditorProps {
   language: string;
+  setCode: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const languageExtensions: any = {
+const languageExtensions: Record<string, any> = {
   javascript,
   python,
   php,
@@ -22,7 +24,7 @@ const languageExtensions: any = {
   "c++": cpp,
 };
 
-const CodeEditor: React.FC<CodeEditorProps> = ({ language }) => {
+const CodeEditor: React.FC<CodeEditorProps> = ({ language, setCode }) => {
   const editorRef = useRef<HTMLDivElement>(null);
   const editorInstance = useRef<EditorView | null>(null);
 
@@ -30,16 +32,22 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ language }) => {
     if (editorRef.current) {
       const extension = languageExtensions[language] || javascript;
 
-      // Destroy previous editor instance
       if (editorInstance.current) {
         editorInstance.current.destroy();
       }
 
-      // Create new editor instance
       editorInstance.current = new EditorView({
         state: EditorState.create({
-          doc:"",
-          extensions: [basicSetup, extension()],
+          doc: "",
+          extensions: [
+            basicSetup,
+            extension(),
+            EditorView.updateListener.of((update) => {
+              if (update.changes) {
+                setCode(update.state.doc.toString());
+              }
+            }),
+          ],
         }),
         parent: editorRef.current,
       });
@@ -52,9 +60,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ language }) => {
     };
   }, [language]);
 
-  return (
-    <div className="border p-4 bg-white dark:bg-gray-900" ref={editorRef}></div>
-  );
+  return <div className="border p-4 bg-white dark:bg-gray-900" ref={editorRef}></div>;
 };
 
 export default CodeEditor;
