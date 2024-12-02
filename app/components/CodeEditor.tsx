@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef } from "react";
-import { EditorState } from "@codemirror/state";
+import { EditorState, Extension } from "@codemirror/state";
 import { EditorView, basicSetup } from "codemirror";
 import { javascript } from "@codemirror/lang-javascript";
 import { python } from "@codemirror/lang-python";
@@ -15,7 +15,7 @@ interface CodeEditorProps {
   setCode: (code: string) => void;
 }
 
-const languageExtensions: Record<string, () => any> = {
+const languageExtensions: Record<string, () => Extension> = {
   javascript,
   python,
   php,
